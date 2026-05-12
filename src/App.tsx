@@ -5,7 +5,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { RefreshCcw, RotateCcw, Info, Trophy, Timer, History as HistoryIcon, Trash2 } from 'lucide-react';
+import { RefreshCcw, RotateCcw, Info, Trophy, Timer, History as HistoryIcon, Trash2, Sun, Moon } from 'lucide-react';
 
 // --- Types ---
 
@@ -52,7 +52,22 @@ export default function App() {
   });
 
   const [inputValue, setInputValue] = useState<string>('');
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+    const saved = localStorage.getItem('theme');
+    if (saved) return saved === 'dark';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [isDarkMode]);
 
   // --- Handlers ---
 
@@ -165,9 +180,19 @@ export default function App() {
   };
 
   return (
-    <div className="w-full h-screen bg-[#F0FDF4] flex flex-col font-sans text-slate-800 overflow-y-auto">
+    <div className="w-full h-screen bg-[#F0FDF4] dark:bg-slate-950 flex flex-col font-sans text-slate-800 dark:text-slate-200 overflow-y-auto transition-colors duration-300">
       {/* Header Section */}
-      <header className="w-full pt-12 flex flex-col items-center flex-shrink-0">
+      <header className="w-full pt-12 pb-6 flex flex-col items-center flex-shrink-0 relative">
+        {/* Theme Toggle */}
+        <div className="absolute top-8 right-8">
+          <button
+            onClick={() => setIsDarkMode(!isDarkMode)}
+            className="p-3 rounded-2xl bg-white dark:bg-slate-800 shadow-lg border border-emerald-100 dark:border-slate-700 text-emerald-600 dark:text-emerald-400 hover:scale-110 transition-all active:scale-95"
+          >
+            {isDarkMode ? <Sun className="w-6 h-6" /> : <Moon className="w-6 h-6" />}
+          </button>
+        </div>
+
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -178,7 +203,7 @@ export default function App() {
         <motion.h1
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="text-5xl md:text-7xl font-black text-slate-900 tracking-tight text-center px-4"
+          className="text-5xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tight text-center px-4"
         >
           猜數字 <span className="text-emerald-500">1-100</span>
         </motion.h1>
@@ -189,36 +214,36 @@ export default function App() {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-white w-full max-w-4xl min-h-[450px] rounded-[40px] lush-shadow border-8 border-emerald-500/10 flex flex-col md:flex-row overflow-hidden flex-shrink-0"
+          className="bg-white dark:bg-slate-900 w-full max-w-4xl min-h-[450px] rounded-[40px] lush-shadow border-8 border-emerald-500/10 dark:border-emerald-500/5 flex flex-col md:flex-row overflow-hidden flex-shrink-0"
         >
 
           {/* Left Side: Status and Stats */}
-          <div className="w-full md:w-1/2 bg-emerald-50 p-8 md:p-12 flex flex-col justify-between border-b-2 md:border-b-0 md:border-r-2 border-emerald-100">
+          <div className="w-full md:w-1/2 bg-emerald-50 dark:bg-slate-800/40 p-8 md:p-12 flex flex-col justify-between border-b-2 md:border-b-0 md:border-r-2 border-emerald-100 dark:border-slate-800">
             <div>
-              <p className="text-emerald-600 font-bold text-xl mb-4">目前的數字範圍</p>
+              <p className="text-emerald-600 dark:text-emerald-400 font-bold text-xl mb-4">目前的數字範圍</p>
               <div className="flex items-center gap-4">
-                <div className="bg-white border-4 border-emerald-500 rounded-3xl h-24 flex-1 flex items-center justify-center lush-shadow">
-                  <span className="text-4xl font-black text-slate-900">{gameState.minRange}</span>
+                <div className="bg-white dark:bg-slate-800 border-4 border-emerald-500 rounded-3xl h-24 flex-1 flex items-center justify-center lush-shadow">
+                  <span className="text-4xl font-black text-slate-900 dark:text-white">{gameState.minRange}</span>
                 </div>
                 <span className="text-3xl font-bold text-emerald-400">~</span>
-                <div className="bg-white border-4 border-emerald-500 rounded-3xl h-24 flex-1 flex items-center justify-center lush-shadow">
-                  <span className="text-4xl font-black text-slate-900">{gameState.maxRange}</span>
+                <div className="bg-white dark:bg-slate-800 border-4 border-emerald-500 rounded-3xl h-24 flex-1 flex items-center justify-center lush-shadow">
+                  <span className="text-4xl font-black text-slate-900 dark:text-white">{gameState.maxRange}</span>
                 </div>
               </div>
             </div>
 
             <div className="space-y-4 mt-8 md:mt-0">
-              <div className="flex justify-between items-center bg-white p-4 rounded-2xl shadow-sm border border-emerald-100">
-                <div className="flex items-center gap-3 text-slate-500 font-medium">
+              <div className="flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-emerald-100 dark:border-slate-700">
+                <div className="flex items-center gap-3 text-slate-500 dark:text-slate-400 font-medium">
                   <Trophy className="w-5 h-5 text-emerald-500" />
                   <span>猜測次數</span>
                 </div>
-                <span className="text-2xl font-black text-emerald-600">
+                <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400">
                   {gameState.attempts.toString().padStart(2, '0')}
                 </span>
               </div>
-              <div className="flex justify-between items-center bg-white p-4 rounded-2xl shadow-sm border border-emerald-100">
-                <div className="flex items-center gap-3 text-slate-500 font-medium">
+              <div className="flex justify-between items-center bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-emerald-100 dark:border-slate-700">
+                <div className="flex items-center gap-3 text-slate-500 dark:text-slate-400 font-medium">
                   <span className="text-xl font-bold text-orange-500">#</span>
                   <span>上次猜測</span>
                 </div>
@@ -230,7 +255,7 @@ export default function App() {
           </div>
 
           {/* Right Side: Interaction Area */}
-          <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col items-center justify-center bg-white relative">
+          <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col items-center justify-center bg-white dark:bg-slate-900 relative">
             <div className="mb-8 text-center w-full">
               <AnimatePresence mode="wait">
                 <motion.div
@@ -250,10 +275,10 @@ export default function App() {
                   animate={{ opacity: 1, y: 0 }}
                   className="space-y-2"
                 >
-                  <h2 className={`text-3xl font-black ${gameState.isWon ? 'text-emerald-500' : 'text-slate-800'}`}>
+                  <h2 className={`text-3xl font-black ${gameState.isWon ? 'text-emerald-500' : 'text-slate-800 dark:text-white'}`}>
                     {gameState.isWon ? '恭喜！' : gameState.message.split('！')[0] + (gameState.message.includes('！') ? '！' : '')}
                   </h2>
-                  <p className="text-slate-400 text-lg">
+                  <p className="text-slate-400 dark:text-slate-500 text-lg">
                     {gameState.isWon ? '你贏得了這場挑戰！' : '再試一個數字...'}
                   </p>
                 </motion.div>
@@ -270,7 +295,7 @@ export default function App() {
                     onChange={(e) => setInputValue(e.target.value)}
                     placeholder="輸入 1-100"
                     disabled={gameState.isWon}
-                    className="w-full bg-slate-100 border-none rounded-3xl p-6 text-3xl font-bold text-center focus:ring-4 focus:ring-emerald-500/20 outline-none placeholder:text-slate-300 transition-all"
+                    className="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-3xl p-6 text-3xl font-bold text-center focus:ring-4 focus:ring-emerald-500/20 outline-none placeholder:text-slate-300 dark:placeholder:text-slate-600 dark:text-white transition-all"
                   />
                   <button
                     type="submit"
@@ -282,7 +307,7 @@ export default function App() {
               ) : (
                 <button
                   onClick={startNewGame}
-                  className="w-full bg-slate-800 hover:bg-slate-900 text-white font-black text-2xl py-6 rounded-3xl button-push-slate flex items-center justify-center gap-3"
+                  className="w-full bg-slate-800 hover:bg-slate-900 dark:bg-emerald-600 dark:hover:bg-emerald-700 text-white font-black text-2xl py-6 rounded-3xl button-push-slate dark:shadow-[0_8px_0_rgb(5,150,105)] flex items-center justify-center gap-3"
                 >
                   <RotateCcw className="w-6 h-6" />
                   重新開始
@@ -297,18 +322,18 @@ export default function App() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="w-full max-w-4xl bg-white/60 backdrop-blur-md rounded-[32px] p-8 lush-shadow border border-white/40"
+            className="w-full max-w-4xl bg-white/60 dark:bg-slate-900/60 backdrop-blur-md rounded-[32px] p-8 lush-shadow border border-white/40 dark:border-slate-800"
           >
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div className="bg-emerald-100 p-2 rounded-xl">
-                  <HistoryIcon className="w-6 h-6 text-emerald-600" />
+                <div className="bg-emerald-100 dark:bg-emerald-900/30 p-2 rounded-xl">
+                  <HistoryIcon className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
                 </div>
-                <h3 className="text-2xl font-black text-slate-800">最近 10 次挑戰紀錄</h3>
+                <h3 className="text-2xl font-black text-slate-800 dark:text-white">最近 10 次挑戰紀錄</h3>
               </div>
               <button
                 onClick={clearHistory}
-                className="text-slate-400 hover:text-rose-500 transition-colors p-2 hover:bg-rose-50 rounded-xl"
+                className="text-slate-400 hover:text-rose-500 transition-colors p-2 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-xl"
                 title="清除紀錄"
               >
                 <Trash2 className="w-5 h-5" />
@@ -318,37 +343,37 @@ export default function App() {
             <div className="overflow-x-auto">
               <table className="w-full text-left">
                 <thead>
-                  <tr className="text-slate-400 text-sm font-bold uppercase tracking-wider">
+                  <tr className="text-slate-400 dark:text-slate-500 text-sm font-bold uppercase tracking-wider">
                     <th className="pb-4 px-2">日期時間</th>
                     <th className="pb-4 px-2">猜測次數</th>
                     <th className="pb-4 px-2">耗費時間</th>
                     <th className="pb-4 px-2 text-right">評分</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   {history.map((record) => (
                     <motion.tr
                       layout
                       key={record.id}
-                      className="group hover:bg-emerald-50/50 transition-colors"
+                      className="group hover:bg-emerald-50/50 dark:hover:bg-slate-800/50 transition-colors"
                     >
-                      <td className="py-4 px-2 font-medium text-slate-600">{record.date}</td>
+                      <td className="py-4 px-2 font-medium text-slate-600 dark:text-slate-400">{record.date}</td>
                       <td className="py-4 px-2">
-                        <div className="flex items-center gap-2 font-black text-slate-800">
+                        <div className="flex items-center gap-2 font-black text-slate-800 dark:text-slate-200">
                           <Trophy className="w-4 h-4 text-emerald-500" />
                           <span>{record.attempts} 次</span>
                         </div>
                       </td>
                       <td className="py-4 px-2">
-                        <div className="flex items-center gap-2 font-black text-slate-800">
+                        <div className="flex items-center gap-2 font-black text-slate-800 dark:text-slate-200">
                           <Timer className="w-4 h-4 text-orange-400" />
                           <span>{record.duration} 秒</span>
                         </div>
                       </td>
                       <td className="py-4 px-2 text-right">
-                        <span className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-tighter ${record.attempts <= 5 ? 'bg-emerald-100 text-emerald-600' :
-                            record.attempts <= 10 ? 'bg-orange-100 text-orange-600' :
-                              'bg-slate-100 text-slate-600'
+                        <span className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-tighter ${record.attempts <= 5 ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400' :
+                            record.attempts <= 10 ? 'bg-orange-100 text-orange-600 dark:bg-orange-900/40 dark:text-orange-400' :
+                              'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
                           }`}>
                           {record.attempts <= 5 ? '大師' : record.attempts <= 10 ? '精英' : '一般'}
                         </span>
@@ -366,12 +391,12 @@ export default function App() {
       <footer className="w-full pb-12 flex justify-center gap-4 md:gap-6 flex-shrink-0">
         <button
           onClick={startNewGame}
-          className="flex items-center gap-3 bg-white px-6 md:px-8 py-3 md:py-4 rounded-full font-bold text-slate-600 shadow-md hover:bg-slate-50 transition-all active:scale-95"
+          className="flex items-center gap-3 bg-white dark:bg-slate-800 px-6 md:px-8 py-3 md:py-4 rounded-full font-bold text-slate-600 dark:text-slate-300 shadow-md hover:bg-slate-50 dark:hover:bg-slate-700 transition-all active:scale-95"
         >
           <RefreshCcw className="w-5 h-5" />
           重置遊戲
         </button>
-        <button className="flex items-center gap-3 bg-slate-800 px-6 md:px-8 py-3 md:py-4 rounded-full font-bold text-white shadow-md hover:bg-slate-900 transition-all active:scale-95">
+        <button className="flex items-center gap-3 bg-slate-800 dark:bg-emerald-600 px-6 md:px-8 py-3 md:py-4 rounded-full font-bold text-white shadow-md hover:bg-slate-900 dark:hover:bg-emerald-700 transition-all active:scale-95">
           <Info className="w-5 h-5" />
           遊戲說明
         </button>
