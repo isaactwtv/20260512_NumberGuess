@@ -1,4 +1,4 @@
-/**
+ㄙㄩㄣ/**
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -34,7 +34,7 @@ const INITIAL_MAX = 100;
 
 export default function App() {
   // --- States ---
-  
+
   const [gameState, setGameState] = useState<GameState>({
     target: Math.floor(Math.random() * INITIAL_MAX) + INITIAL_MIN,
     attempts: 0,
@@ -80,7 +80,7 @@ export default function App() {
 
   const handleGuess = (e?: React.FormEvent) => {
     e?.preventDefault();
-    
+
     if (gameState.isWon || !inputValue) return;
 
     const numGuess = parseInt(inputValue);
@@ -168,14 +168,14 @@ export default function App() {
     <div className="w-full h-screen bg-[#F0FDF4] flex flex-col font-sans text-slate-800 overflow-y-auto">
       {/* Header Section */}
       <header className="w-full pt-12 flex flex-col items-center flex-shrink-0">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-orange-400 text-white px-6 py-2 rounded-full text-sm font-bold tracking-widest uppercase mb-4 shadow-lg"
         >
           經典益智遊戲
         </motion.div>
-        <motion.h1 
+        <motion.h1
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           className="text-5xl md:text-7xl font-black text-slate-900 tracking-tight text-center px-4"
@@ -186,12 +186,12 @@ export default function App() {
 
       {/* Main Game Dashboard */}
       <main className="flex-1 w-full flex flex-col items-center justify-center p-4 md:p-8 space-y-12">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           className="bg-white w-full max-w-4xl min-h-[450px] rounded-[40px] lush-shadow border-8 border-emerald-500/10 flex flex-col md:flex-row overflow-hidden flex-shrink-0"
         >
-          
+
           {/* Left Side: Status and Stats */}
           <div className="w-full md:w-1/2 bg-emerald-50 p-8 md:p-12 flex flex-col justify-between border-b-2 md:border-b-0 md:border-r-2 border-emerald-100">
             <div>
@@ -242,7 +242,7 @@ export default function App() {
                   {getStatusEmoji()}
                 </motion.div>
               </AnimatePresence>
-              
+
               <AnimatePresence mode="wait">
                 <motion.div
                   key={gameState.message}
@@ -263,16 +263,16 @@ export default function App() {
             <div className="w-full flex flex-col gap-4">
               {!gameState.isWon ? (
                 <form onSubmit={handleGuess} className="w-full flex flex-col gap-4">
-                  <input 
+                  <input
                     ref={inputRef}
-                    type="number" 
+                    type="number"
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     placeholder="輸入 1-100"
                     disabled={gameState.isWon}
                     className="w-full bg-slate-100 border-none rounded-3xl p-6 text-3xl font-bold text-center focus:ring-4 focus:ring-emerald-500/20 outline-none placeholder:text-slate-300 transition-all"
                   />
-                  <button 
+                  <button
                     type="submit"
                     className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-black text-2xl py-6 rounded-3xl button-push-emerald"
                   >
@@ -280,7 +280,7 @@ export default function App() {
                   </button>
                 </form>
               ) : (
-                <button 
+                <button
                   onClick={startNewGame}
                   className="w-full bg-slate-800 hover:bg-slate-900 text-white font-black text-2xl py-6 rounded-3xl button-push-slate flex items-center justify-center gap-3"
                 >
@@ -294,7 +294,7 @@ export default function App() {
 
         {/* History Section */}
         {history.length > 0 && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="w-full max-w-4xl bg-white/60 backdrop-blur-md rounded-[32px] p-8 lush-shadow border border-white/40"
@@ -306,7 +306,7 @@ export default function App() {
                 </div>
                 <h3 className="text-2xl font-black text-slate-800">最近 10 次挑戰紀錄</h3>
               </div>
-              <button 
+              <button
                 onClick={clearHistory}
                 className="text-slate-400 hover:text-rose-500 transition-colors p-2 hover:bg-rose-50 rounded-xl"
                 title="清除紀錄"
@@ -327,9 +327,9 @@ export default function App() {
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   {history.map((record) => (
-                    <motion.tr 
+                    <motion.tr
                       layout
-                      key={record.id} 
+                      key={record.id}
                       className="group hover:bg-emerald-50/50 transition-colors"
                     >
                       <td className="py-4 px-2 font-medium text-slate-600">{record.date}</td>
@@ -346,11 +346,10 @@ export default function App() {
                         </div>
                       </td>
                       <td className="py-4 px-2 text-right">
-                        <span className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-tighter ${
-                          record.attempts <= 5 ? 'bg-emerald-100 text-emerald-600' :
-                          record.attempts <= 10 ? 'bg-orange-100 text-orange-600' :
-                          'bg-slate-100 text-slate-600'
-                        }`}>
+                        <span className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-tighter ${record.attempts <= 5 ? 'bg-emerald-100 text-emerald-600' :
+                            record.attempts <= 10 ? 'bg-orange-100 text-orange-600' :
+                              'bg-slate-100 text-slate-600'
+                          }`}>
                           {record.attempts <= 5 ? '大師' : record.attempts <= 10 ? '精英' : '一般'}
                         </span>
                       </td>
@@ -365,7 +364,7 @@ export default function App() {
 
       {/* Footer / Bottom Navigation */}
       <footer className="w-full pb-12 flex justify-center gap-4 md:gap-6 flex-shrink-0">
-        <button 
+        <button
           onClick={startNewGame}
           className="flex items-center gap-3 bg-white px-6 md:px-8 py-3 md:py-4 rounded-full font-bold text-slate-600 shadow-md hover:bg-slate-50 transition-all active:scale-95"
         >
