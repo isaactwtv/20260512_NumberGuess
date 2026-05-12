@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { RefreshCcw, RotateCcw, Info, Trophy, Timer, History as HistoryIcon, Trash2 } from 'lucide-react';
 
