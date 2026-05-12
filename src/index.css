@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  @apply bg-[#F0FDF4] text-slate-800 antialiased min-h-screen overflow-x-hidden;
+}
+
+.lush-shadow {
+  box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+}
+
+.button-push-emerald {
+  @apply shadow-[0_8px_0_rgb(16,185,129)] active:translate-y-1 active:shadow-none transition-all;
+}
+
+.button-push-slate {
+  @apply shadow-[0_8px_0_rgb(30,41,59)] active:translate-y-1 active:shadow-none transition-all;
+}
